@@ -1,6 +1,7 @@
 const http = require("http");
 const { stdin } = require("process");
 const extractProductId = require("./utils/extractProductId");
+const product = require('./models/Products');
 const METHODS = {
   GET: "GET",
   POST: "POST",
@@ -8,13 +9,25 @@ const METHODS = {
   DELETE: "DELETE",
 };
 
-//https://www.geeksforgeeks.org/node-js-response-writehead-method/ iniziare da qui domani
+
+
+
 const server = http.createServer(function (request, response) {
   //è un server crud quindi ha
   //GET
   //POST
   //PUT
   //DELETE
+
+  /* 
+  # Routes
+GET      /api/products
+POST     /api/products
+GET      /api/products/:id
+PUT      /api/products/:id
+DELETE   /api/products/:id
+
+  */
   const url = request.url;
 
   if (request.method === METHODS.GET) {
@@ -45,6 +58,8 @@ server.listen(port);
 console.log("ascolto su ", port);
 console.log("q and newline to exit!!")
 process.stdout.write(">");
+
+product.find().then((data)=>{console.log("\n")});
 
 //creare un event emitter per interrompere il server oppure utilizzare una stind
 stdin.setEncoding("utf-8");

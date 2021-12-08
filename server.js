@@ -1,7 +1,9 @@
 const http = require("http");
 const { stdin } = require("process");
 const extractProductId = require("./utils/extractProductId");
-const product = require('./models/Products');
+
+const {getAllProducts,createProduct} = require('./controllers/products-controller')
+const Product = require('./classes/Product')
 const METHODS = {
   GET: "GET",
   POST: "POST",
@@ -59,7 +61,8 @@ console.log("ascolto su ", port);
 console.log("q and newline to exit!!")
 process.stdout.write(">");
 
-product.find().then((data)=>{console.log("\n")});
+
+createProduct(new Product('spazzolino',10,"spazzolino da denti molto resistente di colore blu")).then(()=>console.log("prodotto creato"))
 
 //creare un event emitter per interrompere il server oppure utilizzare una stind
 stdin.setEncoding("utf-8");

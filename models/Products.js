@@ -9,7 +9,7 @@ class Products extends MODEL {
 }
 
 //qui creo l'istanza di Products e lo esporto?
-const absolutePath = path.resolve('./DB/products.json')
-console.log(absolutePath);
+const absolutePath = path.resolve('./DB/PProducts.json')
+// console.log(absolutePath);
 
 module.exports = new Products(absolutePath);

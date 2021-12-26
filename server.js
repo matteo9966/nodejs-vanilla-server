@@ -2,7 +2,7 @@ const http = require("http");
 const { stdin } = require("process");
 const extractProductId = require("./utils/extractProductId");
 
-const {getAllProducts,createProduct} = require('./controllers/products-controller')
+const {getAllProducts,createProduct,getProductById} = require('./controllers/products-controller')
 const Product = require('./classes/Product')
 const METHODS = {
   GET: "GET",
@@ -36,18 +36,22 @@ DELETE   /api/products/:id
     let data = {};
     console.log(url)
     if (url === "/api/products") {
-      //getAllproducts();
-      console.log("GET ALL PRODUCTS!");
+      getAllProducts(request,response)
+      return
+     
     }
     if (url.match(/\/api\/products\/\w+/i)) {
-      const productID = extractProductId(url);
-      console.log(url, productID);
+      getProductById(request,response);
+      return
+
+     
+
       //getProductById
     }
-    response.writeHead(200, { "Content-Type": "text/plain" });
-
-    response.end("TUTTO é ANDATO BENE!");
-  } else if (request.method === METHODS.POST) {
+   
+    // response.end("TUTTO é ANDATO BENE!");
+  }
+   else if (request.method === METHODS.POST) {
   } else if (request.method === METHODS.PUT) {
   } else if (request.method === METHODS.DELETE) {
   } else {
@@ -62,9 +66,9 @@ console.log("q and newline to exit!!")
 process.stdout.write(">");
 
 
-createProduct(new Product('spazzolino',10,"spazzolino da denti molto resistente di colore blu")).then(()=>console.log("prodotto creato"))
+// createProduct(new Product('spazzolino',10,"spazzolino da denti molto resistente di colore blu")).then(()=>console.log("prodotto creato"))
 
-//creare un event emitter per interrompere il server oppure utilizzare una stind
+// creare un event emitter per interrompere il server oppure utilizzare una stind
 stdin.setEncoding("utf-8");
 stdin.on("data", (data) => {
   console.log(data);

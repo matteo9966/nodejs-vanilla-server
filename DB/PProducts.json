@@ -1,1 +1,22 @@
-["near","bet","railroad","plant","instant","shells","more","series","driver","else","news","protection","half","was","given","wing","spend","greater","close","poem","smallest","air","mill",{"_id":"350f0cd4-938b-47d1-915b-57010007541b","name":"spazzolino","price":10,"description":"spazzolino da denti molto resistente di colore blu"}]
+[
+  
+  {
+    "_id": "350f0cd4-938b-47d1-915b-57010007541b",
+    "name": "spazzolino",
+    "price": 10,
+    "description": "spazzolino da denti molto resistente di colore blu"
+  },
+  {
+    "_id": "133e4308-6044-4f79-976b-540bb5970356",
+    "name": "spazzolino",
+    "price": 10,
+    "description": "spazzolino da denti molto resistente di colore blu"
+  },
+  {
+    "_id": "ff2f044e-565a-4e5d-ab84-d91c2fd1f6b0",
+    "name": "spazzolino",
+    "price": 10,
+    "description": "spazzolino da denti molto resistente di colore blu"
+  }
+ 
+]

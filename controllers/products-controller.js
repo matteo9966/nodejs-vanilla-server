@@ -1,6 +1,7 @@
 const http = require("http");
 const extractProductId = require("../utils/extractProductId");
 const productInstance = require("../models/Products");
+const ObjectFromStream =require("../utils/ObjectFromStream");
 
 /**
  * @param {http.IncomingMessage} req
@@ -38,14 +39,25 @@ const getProductById = async (req, res) => {
 };
 
 //this isnt the final version its just to see if it works
-const createProduct = async (product) => {
-  if (!product) {
-    return;
+/**
+ * @param {http.IncomingMessage} req
+ * @param {http.ServerResponse} res
+ */
+const createProduct = async (req,res) => {
+  try{
+    const product=await ObjectFromStream(req);
+     await productInstance.create(product) //se non crea nulla in teoria lancia un errore!
+
+     res.writeHead(200, { "Content-Type": "application/json" });
+     res.end(JSON.stringify(product))
+   
+
+  }catch(err){
+    res.writeHead(400,{'Content-type':'text/plain'})
+    res.end(err.message)
   }
-  let created = await productInstance.create(product);
-  if (created) {
-    console.log("prodotto creato!!");
-  }
+
+
 };
 
 module.exports = { getAllProducts, createProduct, getProductById };

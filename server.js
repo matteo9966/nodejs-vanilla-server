@@ -15,6 +15,8 @@ const METHODS = {
 
 
 const server = http.createServer(function (request, response) {
+  request.setEncoding('utf-8')
+  
   //è un server crud quindi ha
   //GET
   //POST
@@ -23,9 +25,9 @@ const server = http.createServer(function (request, response) {
 
   /* 
   # Routes
-GET      /api/products
+GET      /api/products   FATTO
 POST     /api/products
-GET      /api/products/:id
+GET      /api/products/:id FATTO
 PUT      /api/products/:id
 DELETE   /api/products/:id
 
@@ -52,6 +54,11 @@ DELETE   /api/products/:id
     // response.end("TUTTO é ANDATO BENE!");
   }
    else if (request.method === METHODS.POST) {
+     if(request.url==="/api/products"){
+    
+      createProduct(request,response)
+      return
+     }
   } else if (request.method === METHODS.PUT) {
   } else if (request.method === METHODS.DELETE) {
   } else {

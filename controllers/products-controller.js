@@ -38,6 +38,7 @@ const getProductById = async (req, res) => {
 
 };
 
+
 //this isnt the final version its just to see if it works
 /**
  * @param {http.IncomingMessage} req
@@ -46,10 +47,10 @@ const getProductById = async (req, res) => {
 const createProduct = async (req,res) => {
   try{
     const product=await ObjectFromStream(req);
-     await productInstance.create(product) //se non crea nulla in teoria lancia un errore!
+     const createdProduct = await productInstance.createProduct(product); //se non crea nulla in teoria lancia un errore!
 
      res.writeHead(200, { "Content-Type": "application/json" });
-     res.end(JSON.stringify(product))
+     res.end(JSON.stringify(createdProduct))
    
 
   }catch(err){
@@ -60,4 +61,47 @@ const createProduct = async (req,res) => {
 
 };
 
-module.exports = { getAllProducts, createProduct, getProductById };
+const deleteProductById =async (req,res) => {
+  const id = extractProductId(req.url);
+  if(!id){
+    res.writeHead(400,{'Content-type':'text/plain'})
+    res.end("no id! :(")
+    return
+  }
+  try{
+    res.writeHead(200, { "Content-Type": "application/json" });
+    const newList= await productInstance.delete(id)
+    console.log(newList);
+    res.end(JSON.stringify(newList));
+    
+  }catch(err){
+    
+    res.writeHead(400,{'Content-type':'text/plain'})
+    res.end(err.message)
+  } 
+
+
+}
+
+const updateProductById= async (req,res)=>{
+  const id = extractProductId(req.url);
+  if(!id){
+    res.writeHead(400,{'Content-type':'text/plain'})
+    res.end("no id! :(")
+    return
+  }
+  const product=await ObjectFromStream(req);
+  try{
+    const updated=await productInstance.updateProduct(id,product);
+    res.writeHead(200, { "Content-Type": "application/json" });
+    res.end(JSON.stringify(updated));
+  }catch(err){
+    res.writeHead(400,{'Content-type':'text/plain'})
+    res.end(err.message)
+  }
+
+
+
+}
+
+module.exports = { getAllProducts, createProduct, getProductById,deleteProductById,updateProductById };

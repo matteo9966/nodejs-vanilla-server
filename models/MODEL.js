@@ -1,7 +1,8 @@
 const { isJSONstring } = require("../utils/utils");
 const fs = require("fs");
 const path = require("path");
-const uuid
+const uuid = require("uuid").v4;
+const writeDataToFile = require('../utils/writeDataToFile')
 function findByKey(parameter = {}) {
   let parameterKey = Object.keys(parameter)[0]; // solo il primo parametro
 
@@ -89,11 +90,11 @@ class MODEL {
       //id must be unique!
       return Promise.reject(new Error("provide a valid id!"));
     }
-    const element = this.find({ _id:id });
+    const element = this.find({ _id: id });
     if (!!element) {
       return element;
     }
-   return Promise.resolve({});
+    return Promise.resolve({});
   }
 
   //resolves with true or false
@@ -102,24 +103,68 @@ class MODEL {
       if (!this.schemaExists()) {
         reject(false);
       }
-
-      const newItem = { _id: "id", ...object };
-
-      //leggi dal file 1
+      const newItem = { _id: uuid().toString(), ...object };
       this._readSchema().then((data) => {
         data.push(newItem);
-        const dataToWrite = JSON.stringify(data);
-        fs.writeFile(this.schema, dataToWrite, (err) => {
-          if (err) {
-            reject(false);
-          }
-          resolve(true);
-        });
+         writeDataToFile(this.schema,data).then(()=>resolve(newItem));
+       
       });
-      //fai un append
-      // restituisci il nuovo array
-      //fine
+    
     });
+  }
+  delete(id) {
+    return new Promise((resolve, reject) => {
+      if (!this.schemaExists()) {
+        reject(new Error("schema does not exist"));
+      }
+
+      this._readSchema()
+        .then((data) => {
+          const elements = Array.from(data);
+          const index = elements.findIndex((el) => {
+            return el._id === id;
+          });
+          if (index < 0) {
+            throw new Error("Element not Found!!");
+          }
+
+          elements.splice(index, 1);
+          writeDataToFile(this.schema,elements).then(res=>resolve(res));
+  
+        })
+        .catch((err) => reject(err));
+    });
+  }
+       
+//quello che posso fare è 
+
+  update(id,newValues={}){
+    return new Promise((resolve,reject)=>{
+      if (!this.schemaExists()) {
+       return  reject(new Error("schema does not exist"));
+      }
+      if(typeof newValues !=='object') {
+       return reject(new Error("Provide valid object values!"))
+      }
+
+      this._readSchema().then((data)=>{
+        const elements = Array.from(data);
+        const index = elements.findIndex((el) => {
+          return el._id === id;
+        });
+        if (index < 0) {
+          throw new Error("Element not Found!!");
+        }
+        const found =  elements[index];
+        const updated ={...found,...newValues};
+        elements.splice(index,1,updated); //in questo modo dovrei aver sostituito con l'elemento nuovo
+        writeDataToFile(this.schema,elements).then(res=>resolve(res));
+        
+
+      })
+      .catch((err) => reject(err));
+    })
+
   }
 }
 

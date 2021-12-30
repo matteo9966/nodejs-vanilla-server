@@ -31,7 +31,7 @@ const server = http.createServer(function (request, response) {
 GET      /api/products     FATTO
 POST     /api/products     FATTO
 GET      /api/products/:id FATTO
-PUT      /api/products/:id 
+PUT      /api/products/:id FATTO
 DELETE   /api/products/:id FATTO
 
   */
